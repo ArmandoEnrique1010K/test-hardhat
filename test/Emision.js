@@ -2,36 +2,31 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-// Conjunto de pruebas
-describe("Deploy and Mint", function () {
-  let CopyrightMusic; // Variable para almacenar la fábrica del contrato CopyrightMusic
-  let copyrightMusic; // Variable para interactuar con una instancia específica del contrato CopyrightMusic
-  let owner; // Variable para representar la dirección del propietario durante las pruebas
-  let DataManagement; // Variable para almacenar la fábrica del contrato DataManagement
+// Conjunto de pruebas para la emisión inicial de tokens (Mint)
+describe("Emisión inicial de Tokens", function () {
+  // Variable para almacenar la fábrica del contrato CopyrightMusic
+  let CopyrightMusic;
+  // Variable para interactuar con una instancia específica del contrato CopyrightMusic
+  let copyrightMusic;
+  // Variable para representar la dirección del propietario durante las pruebas
+  let owner;
 
   // Configuración inicial antes de cada prueba
   beforeEach(async function () {
     // Obtener la dirección del propietario
     [owner] = await ethers.getSigners();
 
-    // Desplegar una instancia del contrato DataManagement
-    DataManagement = await ethers.getContractFactory("DataManagement");
-    const dataManagement = await DataManagement.deploy();
-
     // Desplegar una instancia del contrato CopyrightMusic
     CopyrightMusic = await ethers.getContractFactory("CopyrightMusic");
     copyrightMusic = await CopyrightMusic.deploy();
   });
 
-  // Prueba específica
-  it("Should deploy and mint initial supply", async function () {
-    // Verificar la propiedad del contrato
-    expect(await copyrightMusic.owner()).to.equal(owner.address);
-
+  // Prueba específica para verificar la emisión inicial de tokens
+  it("Should mint initial supply", async function () {
     // Definir la cantidad inicial de tokens en unidades atómicas (wei)
     const initialSupply = ethers.parseUnits("1000000", 18);
 
-    // Verificar el saldo inicial de tokens del propietario
+    // Verificar que el balance del propietario sea igual a la cantidad inicial
     expect(await copyrightMusic.balanceOf(owner.address)).to.equal(
       initialSupply
     );
